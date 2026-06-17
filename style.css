@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Montserrat:wght@200;300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Montserrat:wght@200;300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
 
 /* --- DESIGN SYSTEM & VARIABLES --- */
 :root {
@@ -19,7 +19,7 @@
   --border-focus: hsl(36, 45%, 50%);    /* Accent border on focus */
   
   /* Fonts */
-  --font-serif: 'Merriweather', Georgia, serif;
+  --font-serif: 'Newsreader', 'Merriweather', Georgia, serif;
   --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   
@@ -1133,4 +1133,204 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .btn, .portfolio-item img, .gallery-item img, .logo img {
     transition: none !important;
   }
+}
+
+/* --- PREMIUM CREATIVE DEVELOPER ENHANCEMENTS --- */
+
+/* Interactive Constellation Canvas */
+#constellation-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-overlay-grid {
+  position: relative;
+  z-index: 5;
+}
+
+/* Infinite Scroll Marquee */
+.marquee-band {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  background-color: var(--bg-secondary);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1.8rem 0;
+  white-space: nowrap;
+}
+
+.marquee-content {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  padding: 0 2rem;
+  animation: marquee-scroll 35s linear infinite;
+  min-width: 100%;
+  justify-content: space-around;
+  will-change: transform;
+}
+
+.marquee-content span {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 2vw, 1.8rem);
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--fg-secondary);
+}
+
+.marquee-content .star {
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+/* 3D Tilt Card Base Setup */
+.portfolio-item,
+.gallery-item {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.portfolio-item img,
+.gallery-item img {
+  will-change: transform;
+}
+
+.portfolio-info {
+  transform: translateZ(40px);
+  transform-style: preserve-3d;
+}
+
+.gallery-item-zoom {
+  transform: translate(-50%, -50%) translateZ(40px) scale(0.9);
+}
+
+.gallery-item:hover .gallery-item-zoom {
+  transform: translate(-50%, -50%) translateZ(40px) scale(1);
+}
+
+/* Smooth Lenis Page Scroll CSS */
+html.lenis {
+  height: auto;
+}
+
+.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* --- CELESTIAL THEME TOGGLE (Inspired by Breedlove.xyz) --- */
+
+/* Light Mode variables override */
+html[data-theme="light"] {
+  --bg-primary: hsl(36, 30%, 96%);      /* Warm Alabaster Sand */
+  --bg-secondary: hsl(36, 20%, 91%);    /* Light Sand Accent */
+  --bg-card: hsl(36, 18%, 93%);         /* Warm Cream Card */
+  
+  --fg-primary: hsl(36, 45%, 15%);      /* Dark Charcoal/Espresso */
+  --fg-secondary: hsl(36, 15%, 35%);    /* Muted Espresso */
+  --fg-muted: hsl(36, 10%, 55%);        /* Warm Muted Grey */
+  
+  --border: hsl(36, 20%, 82%);          /* Thin Sand Border */
+  --accent-muted: hsl(36, 45%, 45%);    /* Warm Bronze Gold */
+  
+  --shadow-tinted: 0 10px 30px -10px rgba(50, 45, 40, 0.15);
+}
+
+/* Header background in Light Mode */
+html[data-theme="light"] .header {
+  background-color: rgba(246, 242, 234, 0.75);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Menu toggle in Light Mode */
+html[data-theme="light"] .menu-toggle span {
+  background-color: var(--fg-primary);
+}
+
+/* Mobile nav menu in Light Mode */
+@media (max-width: 991px) {
+  html[data-theme="light"] .nav-menu {
+    background-color: var(--bg-primary);
+  }
+}
+
+/* Keep hero overlay elements consistently readable on dark video background */
+.hero-content .eyebrow {
+  color: var(--accent);
+}
+.hero-content .hero-title {
+  color: hsl(0, 0%, 96%);
+}
+.hero-content .hero-title span {
+  color: var(--accent);
+}
+.hero-content .hero-description {
+  color: hsl(0, 0%, 80%);
+}
+
+/* Theme Toggle Button Styles */
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--fg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  width: 40px;
+  height: 40px;
+  z-index: 110;
+}
+
+.theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--accent);
+}
+
+html[data-theme="light"] .theme-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.theme-toggle-svg {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.theme-toggle:hover .theme-toggle-svg {
+  transform: rotate(45deg);
+}
+
+html[data-theme="light"] .theme-toggle-svg {
+  color: var(--fg-primary);
 }

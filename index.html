@@ -31,22 +31,38 @@
         <img src="assets/logo-white.png" alt="Gabriel Gouveia Fotografia Logo">
       </a>
       
-      <nav class="nav" id="nav-bar">
-        <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menu de navegação">
-          <span></span>
-          <span></span>
-          <span></span>
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Alterar tema" title="Alterar tema">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-toggle-svg">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
         </button>
         
-        <ul class="nav-menu" id="nav-menu">
-          <li><a href="#hero" class="nav-link">Início</a></li>
-          <li><a href="#portfolio" class="nav-link">Portfólio</a></li>
-          <li><a href="#servicos" class="nav-link">Serviços</a></li>
-          <li><a href="#depoimentos" class="nav-link">Depoimentos</a></li>
-          <li><a href="#galeria" class="nav-link">Galeria</a></li>
-          <li class="nav-cta"><a href="#agendamento" class="btn btn-secondary" style="padding: 0.6rem 1.5rem; font-size: 0.75rem;">Contato</a></li>
-        </ul>
-      </nav>
+        <nav class="nav" id="nav-bar">
+          <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menu de navegação">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          
+          <ul class="nav-menu" id="nav-menu">
+            <li><a href="#hero" class="nav-link">Início</a></li>
+            <li><a href="#portfolio" class="nav-link">Portfólio</a></li>
+            <li><a href="#servicos" class="nav-link">Serviços</a></li>
+            <li><a href="#depoimentos" class="nav-link">Depoimentos</a></li>
+            <li><a href="#galeria" class="nav-link">Galeria</a></li>
+            <li class="nav-cta"><a href="#agendamento" class="btn btn-secondary" style="padding: 0.6rem 1.5rem; font-size: 0.75rem;">Contato</a></li>
+          </ul>
+        </nav>
+      </div>
     </div>
   </header>
 
@@ -59,6 +75,7 @@
         <video id="hero-video" src="assets/site.mp4" muted playsinline preload="auto" aria-hidden="true"></video>
         
         <div class="hero-overlay">
+          <canvas id="constellation-canvas"></canvas>
           <div class="container hero-overlay-grid">
             <div class="hero-content reveal">
               <span class="eyebrow">Histórias Reais</span>
@@ -77,6 +94,38 @@
         </div>
       </div>
     </section>
+
+    <!-- INFINITE MARQUEE BAND -->
+    <div class="marquee-band">
+      <div class="marquee-content">
+        <span>GABRIEL GOUVEIA</span>
+        <span class="star">★</span>
+        <span>SENSIVILIDADE</span>
+        <span class="star">★</span>
+        <span>CONEXÃO</span>
+        <span class="star">★</span>
+        <span>ESSÊNCIA</span>
+        <span class="star">★</span>
+        <span>HISTÓRIAS REAIS</span>
+        <span class="star">★</span>
+        <span>MEMÓRIA VISUAL</span>
+        <span class="star">★</span>
+      </div>
+      <div class="marquee-content" aria-hidden="true">
+        <span>GABRIEL GOUVEIA</span>
+        <span class="star">★</span>
+        <span>SENSIVILIDADE</span>
+        <span class="star">★</span>
+        <span>CONEXÃO</span>
+        <span class="star">★</span>
+        <span>ESSÊNCIA</span>
+        <span class="star">★</span>
+        <span>HISTÓRIAS REAIS</span>
+        <span class="star">★</span>
+        <span>MEMÓRIA VISUAL</span>
+        <span class="star">★</span>
+      </div>
+    </div>
 
     <!-- PORTFOLIO SECTION -->
     <section id="portfolio" class="section-padding">
@@ -395,6 +444,7 @@
   </footer>
 
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.36/dist/lenis.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

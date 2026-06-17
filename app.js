@@ -342,4 +342,248 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }, 1800);
   });
+
+  /* ==========================================================================
+     6. PREMIUM CREATIVE DEVELOPER ENHANCEMENTS (Inspired by Breedlove.xyz)
+     ========================================================================== */
+  
+  if (!prefersReducedMotion) {
+    // A. LENIS SMOOTH PAGE SCROLL
+    if (typeof Lenis !== 'undefined') {
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        direction: 'vertical',
+        gestureDirection: 'vertical',
+        smooth: true,
+        mouseMultiplier: 1,
+        smoothTouch: false,
+        touchMultiplier: 2,
+        infinite: false,
+      });
+
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+
+      requestAnimationFrame(raf);
+
+      // Support page anchor links smoothly
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          
+          const targetEl = document.querySelector(targetId);
+          if (targetEl) {
+            e.preventDefault();
+            lenis.scrollTo(targetEl);
+          }
+        });
+      });
+    }
+
+    // B. INTERACTIVE 3D CARD TILT EFFECT
+    const tiltElements = document.querySelectorAll('.portfolio-item, .gallery-item');
+    tiltElements.forEach(el => {
+      el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const percentX = (x - centerX) / centerX;
+        const percentY = (y - centerY) / centerY;
+
+        const maxTilt = 8; // elegant and subtle tilt
+
+        const rotateX = -percentY * maxTilt;
+        const rotateY = percentX * maxTilt;
+
+        el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        el.style.transition = 'transform 0.08s ease-out';
+      });
+
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        el.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+      });
+
+      el.addEventListener('mouseenter', () => {
+        el.style.transition = 'transform 0.2s ease-out';
+      });
+    });
+
+    // C. INTERACTIVE CONSTELLATION CANVAS
+    const canvas = document.getElementById('constellation-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = canvas.offsetWidth;
+      let height = canvas.height = canvas.offsetHeight;
+
+      const particles = [];
+      const particleCount = 45;
+      const maxDistance = 110;
+      const mouse = { x: null, y: null, active: false };
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = canvas.offsetWidth;
+        height = canvas.height = canvas.offsetHeight;
+      });
+
+      const heroOverlay = document.querySelector('.hero-overlay');
+      if (heroOverlay) {
+        heroOverlay.addEventListener('mousemove', (e) => {
+          const rect = heroOverlay.getBoundingClientRect();
+          mouse.x = e.clientX - rect.left;
+          mouse.y = e.clientY - rect.top;
+          mouse.active = true;
+        });
+
+        heroOverlay.addEventListener('mouseleave', () => {
+          mouse.x = null;
+          mouse.y = null;
+          mouse.active = false;
+        });
+      }
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * width;
+          this.y = Math.random() * height;
+          this.vx = (Math.random() - 0.5) * 0.35;
+          this.vy = (Math.random() - 0.5) * 0.35;
+          this.radius = Math.random() * 1.2 + 0.6;
+        }
+
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+
+          if (this.x < 0 || this.x > width) this.vx *= -1;
+          if (this.y < 0 || this.y > height) this.vy *= -1;
+
+          if (mouse.active && mouse.x !== null && mouse.y !== null) {
+            const dx = mouse.x - this.x;
+            const dy = mouse.y - this.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 140) {
+              this.x += dx * 0.008;
+              this.y += dy * 0.008;
+            }
+          }
+        }
+
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(230, 200, 156, 0.45)'; // ACCENT COLOR
+          ctx.fill();
+        }
+      }
+
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, width, height);
+
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const p1 = particles[i];
+            const p2 = particles[j];
+
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < maxDistance) {
+              const alpha = (1 - dist / maxDistance) * 0.12;
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(230, 200, 156, ${alpha})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+
+          if (mouse.active && mouse.x !== null && mouse.y !== null) {
+            const p = particles[i];
+            const dx = p.x - mouse.x;
+            const dy = p.y - mouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < 140) {
+              const alpha = (1 - dist / 140) * 0.22;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(mouse.x, mouse.y);
+              ctx.strokeStyle = `rgba(230, 200, 156, ${alpha})`;
+              ctx.lineWidth = 0.6;
+              ctx.stroke();
+            }
+          }
+        }
+
+        requestAnimationFrame(animateParticles);
+      }
+
+      animateParticles();
+    }
+
+    // D. CELESTIAL THEME TOGGLE (Inspired by Breedlove.xyz)
+    const themeToggle = document.getElementById('theme-toggle');
+    const logoImg = document.querySelector('.logo img');
+    
+    if (themeToggle && logoImg) {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeUI(savedTheme);
+
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeUI(newTheme);
+      });
+
+      function updateThemeUI(theme) {
+        if (theme === 'light') {
+          logoImg.src = 'assets/logo-dark.png';
+          themeToggle.innerHTML = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-toggle-svg">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          `;
+        } else {
+          logoImg.src = 'assets/logo-white.png';
+          themeToggle.innerHTML = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-toggle-svg">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          `;
+        }
+      }
+    }
+  }
 });
